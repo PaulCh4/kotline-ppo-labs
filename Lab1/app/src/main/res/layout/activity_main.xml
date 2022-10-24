@@ -8,15 +8,20 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/frDataPanel"
         android:layout_width="409dp"
         android:layout_height="354dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="-58dp">
 
@@ -157,12 +162,12 @@
                 android:layout_width="240dp"
                 android:layout_height="56dp"
                 android:layout_marginTop="148dp"
+                android:clickable="true"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:longClickable="false"
 
+                android:longClickable="false"
                 android:text="ufulri;tt"
-                android:clickable="true"
 
 
                 app:layout_constraintEnd_toEndOf="parent"
@@ -224,10 +229,9 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/frButtonPanel"
         android:layout_width="410dp"
         android:layout_height="312dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.93"
@@ -237,7 +241,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="286dp">
+            android:layout_height="286dp"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/bt1"
