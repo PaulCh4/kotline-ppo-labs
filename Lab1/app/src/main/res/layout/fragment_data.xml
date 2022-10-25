@@ -50,7 +50,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <Button
-            android:id="@+id/button9"
+            android:id="@+id/X1"
             android:layout_width="26dp"
             android:layout_height="99dp"
             android:layout_marginTop="48dp"
@@ -62,7 +62,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button11"
+            android:id="@+id/X2"
             android:layout_width="22dp"
             android:layout_height="75dp"
             android:layout_marginTop="72dp"
@@ -74,7 +74,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button10"
+            android:id="@+id/X3"
             android:layout_width="26dp"
             android:layout_height="99dp"
             android:layout_marginTop="48dp"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button12"
+            android:id="@+id/X4"
             android:layout_width="22dp"
             android:layout_height="75dp"
             android:layout_marginTop="72dp"
@@ -109,36 +109,36 @@
             app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btCopy2"
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
-            android:text="Button"
-            android:textSize="8sp"
+            android:text="copy"
+            android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
             app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"
             app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/btPaste"
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
-            android:text="Button"
-            android:textSize="8sp"
+            android:text="paste"
+            android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
             app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
             app:layout_constraintTop_toBottomOf="@+id/button17"
             app:layout_constraintVertical_bias="1.0" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btCopy"
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
-            android:text="Button"
-            android:textSize="8sp"
+            android:text="copy"
+            android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
             app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
             app:layout_constraintTop_toBottomOf="@+id/button17"
@@ -151,12 +151,12 @@
             android:layout_marginTop="148dp"
             android:clickable="true"
             android:ems="10"
+            android:hint="0.0"
+
             android:inputType="textPersonName"
 
+
             android:longClickable="false"
-            android:text="ufulri;tt"
-
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toStartOf="parent"
@@ -167,13 +167,15 @@
             android:layout_width="242dp"
             android:layout_height="56dp"
             android:layout_marginTop="4dp"
+            android:editable="false"
             android:ems="10"
+
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="0.0"
+
             android:inputType="textPersonName"
-
             android:longClickable="false"
-
-
-            android:text="ufulri;tt"
             app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
@@ -200,11 +202,12 @@
             app:layout_constraintTop_toBottomOf="@+id/btRevert" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/X5"
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
-            android:text="Button"
+            android:editable="false"
+            android:enabled="false"
             android:textSize="8sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
             app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"

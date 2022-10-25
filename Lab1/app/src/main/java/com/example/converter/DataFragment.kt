@@ -19,7 +19,7 @@ class DataFragment : Fragment() {
 
     var index = 0
     var text:String = "empty"
-    var edittext_number: Int = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataBinding.inflate(inflater)
         return binding.root
@@ -38,50 +38,52 @@ class DataFragment : Fragment() {
 
 
 
-
-        dataModel.bt1_data.observe(activity as LifecycleOwner) {
+        //TODO BUTTONCLICK
+        //ограничение на количество вводимых чисел
+        dataModel.on_click.observe(activity as LifecycleOwner) {
             if (edittext.isFocused()) {
                 index = edittext.getSelectionStart();
                 edittext.text.insert(index, it)
                 edittext.setSelection(index + 1)
 
-                Log.d("(!)", "${edittext.text}   $index  bt1")
-            } else if (edittext2.isFocused()) {
-                index = edittext2.getSelectionStart();
-                edittext2.text.insert(index, it)
-                edittext2.setSelection(index + 1)
-
-                Log.d("(!)", "${edittext2.text}   $index  bt1")
+                Update()
+                //Log.d("(!)", "${edittext.text}   $index  bt1")
             }
+
         }
-        dataModel.bt2_data.observe(activity as LifecycleOwner) {
-            if(edittext.isFocused()) {
+        dataModel.point_event.observe(activity as LifecycleOwner) {
+            if (edittext.isFocused()) {//TODO + проверка на выход из диапазона
+                index = edittext.getSelectionStart();
+                edittext.setText(edittext.text.toString().replace("[.]".toRegex(), " "))
+
+                edittext.text.insert(index, it)
+                edittext.setSelection(index + 1)
+                edittext.setText(edittext.text.toString().replace("[ ]".toRegex(), ""))
+
+                edittext.setSelection(edittext.text.indexOf('.') + 1)
+
+                Update()
+                Log.d("(!)", "${edittext.text}   $index  bt1")
+            }
+
+
+        }
+        dataModel.zero_event.observe(activity as LifecycleOwner) {
+            if (edittext.isFocused()) {//ToDO проверка бесконечные нули
+
                 index = edittext.getSelectionStart();
                 edittext.text.insert(index, it)
-                edittext.setSelection(index+1)
+                edittext.setSelection(index + 1)
 
-                Log.d("(!)","${edittext.text}   $index  bt2")
+                Update()
+                //Log.d("(!)", "${edittext.text}   $index  bt1")
             }
-            else if(edittext2.isFocused()){
-                index = edittext2.getSelectionStart();
-                edittext2.text.insert(index, it)
-                edittext2.setSelection(index+1)
 
-                Log.d("(!)","${edittext2.text}   $index  bt2")
-            }
         }
 
 
-
-
-
-
-
-
-
-
-
-        fun Delete(){
+        //TODO DELETE
+        dataModel.back_event.observe(activity as LifecycleOwner) {
             if(edittext.isFocused()) {
                 index = edittext.getSelectionStart();
                 //TODO Допилить проверку на выход за границы
@@ -89,28 +91,22 @@ class DataFragment : Fragment() {
                 text = text.substring(0, index - 1) + text.substring(index);
 
                 edittext.setText(text);
-                Log.d("(!)", "${edittext.text}   $index   Back")
                 edittext.setSelection(index - 1)
+
+                Update()
             }
-            else if(edittext2.isFocused()){
-                index = edittext2.getSelectionStart();
-                //TODO Допилить проверку на выход за границы
-                text = edittext2.getText().toString();
-                text = text.substring(0, index - 1) + text.substring(index);
-
-                edittext2.setText(text);
-                Log.d("(!)", "${edittext2.text}   $index   Back")
-                edittext2.setSelection(index - 1)
-            }
-
-
-
         }
-        dataModel.bt_back.observe(activity as LifecycleOwner) {
-            Delete()
-        }
+
     }
 
+    fun Update(){
+        //TODO логика категорий????
+        var temp = binding.editTextTextPersonName.text.toString().toDouble() *  0.62137119224
+        binding.editTextTextPersonName2.setText(temp.toString())
+    }
+    fun Swap_OnClick(){}//TODO
+    fun Copy_OnClick(){}//TODO
+    fun Paste_OnClick(){}//TODO
 
 
 
