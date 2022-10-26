@@ -1,14 +1,17 @@
 package com.example.converter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils.isEmpty
 import android.util.Log
 import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
-import com.example.converter.databinding.FragmentButtonPanelBinding
 import com.example.converter.databinding.FragmentDataBinding
 import com.example.testfragmentview.DataModel
 
@@ -16,6 +19,9 @@ import com.example.testfragmentview.DataModel
 class DataFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
     lateinit var binding: FragmentDataBinding
+
+    var fromUnit = "meter"
+    var toUnit = "meter"
 
     var index = 0
     var text:String = "empty"
@@ -31,6 +37,7 @@ class DataFragment : Fragment() {
 
         val edittext =  binding.editTextTextPersonName
         val edittext2 =  binding.editTextTextPersonName2
+
         edittext.showSoftInputOnFocus = false
         edittext.disableCopyPaste()
         edittext2.showSoftInputOnFocus = false
@@ -38,10 +45,10 @@ class DataFragment : Fragment() {
 
 
 
-        //TODO BUTTONCLICK
+        //--------------------------------TODO BUTTONCLICK
         //ограничение на количество вводимых чисел
         dataModel.on_click.observe(activity as LifecycleOwner) {
-            if (edittext.isFocused()) {
+            if (edittext.isFocused() && binding.editTextTextPersonName.text.length < 17) {
                 index = edittext.getSelectionStart();
                 edittext.text.insert(index, it)
                 edittext.setSelection(index + 1)
@@ -51,8 +58,9 @@ class DataFragment : Fragment() {
             }
 
         }
+        //------------------------------TODO SPECIAL BUTTON
         dataModel.point_event.observe(activity as LifecycleOwner) {
-            if (edittext.isFocused()) {//TODO + проверка на выход из диапазона
+            if (edittext.isFocused() && !binding.editTextTextPersonName.text.isEmpty()) {//TODO + проверка на выход из диапазона
                 index = edittext.getSelectionStart();
                 edittext.setText(edittext.text.toString().replace("[.]".toRegex(), " "))
 
@@ -80,12 +88,9 @@ class DataFragment : Fragment() {
             }
 
         }
-
-
-        //TODO DELETE
         dataModel.back_event.observe(activity as LifecycleOwner) {
-            if(edittext.isFocused()) {
-                index = edittext.getSelectionStart();
+            index = edittext.getSelectionStart();
+            if(edittext.isFocused() && !binding.editTextTextPersonName.text.isEmpty() && index!=0) {
                 //TODO Допилить проверку на выход за границы
                 text = edittext.getText().toString();
                 text = text.substring(0, index - 1) + text.substring(index);
@@ -93,37 +98,87 @@ class DataFragment : Fragment() {
                 edittext.setText(text);
                 edittext.setSelection(index - 1)
 
-                Update()
             }
+            Update()
         }
 
+        binding.btSwap.setOnClickListener{
+            edittext.setText(edittext2.text.toString())
+            Update()
+        }
+
+
+        //----------------------------------TODO COPY\Paste
+        binding.btCopy.setOnClickListener{
+            val textToCopy = edittext.text
+
+            val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("text",textToCopy)
+            clipboardManager.setPrimaryClip(clipData)
+
+
+        }
+        binding.btCopy2.setOnClickListener{
+            val textToCopy = edittext2.text
+
+            val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("text",textToCopy)
+            clipboardManager.setPrimaryClip(clipData)
+
+
+        }
+        binding.btPaste.setOnClickListener{
+            val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+            binding.editTextTextPersonName.setText(clipboardManager.primaryClip?.getItemAt(0)?.text)
+            Update()
+        }
+
+        //---------------------------------------TODO CATEGOTY
+        var array_data = resources.getStringArray(R.array.Distance)
+        setSpinner(array_data)
+
+        binding.btCategory1.setOnClickListener{
+            array_data = resources.getStringArray(R.array.Data)
+            setSpinner(array_data)
+        }
+        binding.btCategory2.setOnClickListener{
+            array_data = resources.getStringArray(R.array.Distance)
+            setSpinner(array_data)
+        }
+        binding.btCategory3.setOnClickListener{
+            array_data = resources.getStringArray(R.array.Time)
+            setSpinner(array_data)
+        }
+
+
+
     }
+    val b = mapOf(
+        "meter" to 1.00,
+        "foot" to 1.09,
+        "yard" to 3.28,
+
+        "bit" to 1.00,
+        "byte" to 0.125,
+        "kilobyte" to 0.000125,
+
+        "minute" to 60.0,
+        "second" to 3600.0,
+        "hour" to 1.0
+    )
+
+
 
     fun Update(){
         //TODO логика категорий????
-        var temp = binding.editTextTextPersonName.text.toString().toDouble() *  0.62137119224
-        binding.editTextTextPersonName2.setText(temp.toString())
+        if(!binding.editTextTextPersonName.text.isEmpty() ) {
+            var temp = binding.editTextTextPersonName.text.toString()
+                .toBigDecimal() * (b[toUnit].toString().toBigDecimal() / b[fromUnit].toString().toBigDecimal())
+            binding.editTextTextPersonName2.setText(temp.toString())
+        }
+        else if(binding.editTextTextPersonName.text.isEmpty()) binding.editTextTextPersonName2.text.clear()
     }
-    fun Swap_OnClick(){}//TODO
-    fun Copy_OnClick(){}//TODO
-    fun Paste_OnClick(){}//TODO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -151,4 +206,59 @@ class DataFragment : Fragment() {
             }
         }
     }
+    //--------------------------TODO SPINNER
+    fun setSpinner(languages: Array<String>) {
+        val spinner = binding.spinner
+        val spinner2 = binding.spinner2
+
+        val adapter = ArrayAdapter(
+            requireActivity(),
+            android.R.layout.simple_spinner_item, languages
+        )
+        spinner.adapter = adapter
+        spinner2.adapter = adapter
+
+        spinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+                fromUnit = languages[position]
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.selected_item) + " " +
+                            "" + languages[position], Toast.LENGTH_SHORT
+                ).show()
+                Update()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+        spinner2.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+                toUnit = languages[position]
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.selected_item) + " " +
+                            "" + languages[position], Toast.LENGTH_SHORT
+                ).show()
+                Update()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+
+    }
+
+
 }
+

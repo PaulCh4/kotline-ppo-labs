@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,22 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //---------------
         supportFragmentManager.beginTransaction().replace(R.id.frButtonPanel, ButtonPanelFragment()).commit()
         supportFragmentManager.beginTransaction().replace(R.id.frDataPanel, DataFragment()).commit()
-
-        //dataModel.message.observe(this,{
-        //    it
-        //})
-        //--------------
-
-
-
     }
-
-
-
-
-
-
 }
