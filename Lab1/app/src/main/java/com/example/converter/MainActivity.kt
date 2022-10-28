@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.converter.databinding.ActivityMainBinding
 import com.example.testfragmentview.DataModel
 
@@ -24,5 +25,12 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().replace(R.id.frButtonPanel, ButtonPanelFragment()).commit()
         supportFragmentManager.beginTransaction().replace(R.id.frDataPanel, DataFragment()).commit()
+
+      //  showGif()
+
+
     }
+    //fun showGif(){
+   //    Glide.with(this).load(R.drawable.rename).into(binding.imageButton)
+   // }
 }

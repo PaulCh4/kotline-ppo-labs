@@ -1,0 +1,115 @@
+val etTextToCopy:EditText=findViewById(R.id.editTextTextPersonName)
+        val btnCopyText: Button = findViewById(R.id.btCopy)
+
+        btnCopyText.setOnClickListener{
+            val textToCopy = etTextToCopy.text
+            val clipboardManager=getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData=ClipData.newPlainText("text",textToCopy)
+            clipboardManager.setPrimaryClip(clipData)
+
+            Toast.makeText(this,"Text copied", Toast.LENGTH_SHORT).show()
+        }
+
+        //---------------------------paste---------------------------------------
+        val etTextToCopy2:EditText=findViewById(R.id.editTextTextPersonName2)
+        val btnPasteText: Button = findViewById(R.id.buttonPaste)
+
+        btnPasteText.setOnClickListener{
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+            etTextToCopy2.setText(clipboardManager.primaryClip?.getItemAt(0)?.text)
+        }
+        //--------------------------spinner-----------------------------------
+        val textview: TextView = findViewById(R.id.textSpinner)
+        val languages = resources.getStringArray(R.array.Languages)
+
+
+
+        // access the spinner
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        if (spinner != null) {
+            val adapter = ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, languages)
+            spinner.adapter = adapter
+
+            spinner.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>,
+                                            view: View, position: Int, id: Long) {
+                    textview.text = languages[position]
+                    if(textview.text.toString() == "Python")
+                        textview.text = "1"
+                    /*Toast.makeText(this@MainActivity,
+                        getString(R.string.selected_item) + " " +
+                                "" + languages[position], Toast.LENGTH_SHORT).show()*/
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // write code to perform some action
+                }
+            }
+
+ Создайте объект, который хранит "вес" каждой единицы измерения (обратите внимание, что я использую метр в качестве ориентира, поэтому, если вы хотите добавить фут или дюйм, имейте это в виду).:
+
+ var units = {
+   mm: 0.001,
+   cm: 0.01,
+   dm: 0.1,
+   m: 1,
+   km: 1000
+ }
+ Затем напишите функцию преобразования:
+
+ function convert(value, fromUnit, toUnit) {
+   return value * (units[fromUnit] / units[toUnit])
+ }
+ Используйте это так:
+
+ convert(42, 'mm', 'cm')
+ // --> 4.2
+
+ ___________________
+         fun Firewall(){
+             var firewall = edittext.text.toString()//.toDouble().toBigDecimal()
+
+             edittext.setText( firewall.replace("^0+(?!$) && ^+.0(?!\$)".toRegex(), ""))
+             Log.d("(!)","$firewall")
+         }
+  ____
+          fun Zero():Boolean{
+              var temp = edittext.text.toString().toBigDecimal()
+              var temp2 = edittext.text
+              Log.d("(!)", "$temp $temp2")
+
+
+              index = edittext.getSelectionStart();
+              temp2.insert(index, "0")
+
+
+              return temp2.toString()[index] == temp.toString()[index]
+ _______________________
+
+
+
+//focus default
+
+ //точность
+//2 нуля в начале
+
+ //диапазон нуля
+ //запрет copy\past
+ //переделать time
+ //точка в конце
+
+ //тосты по любому поводу
+
+ //Меню цвета? и Vip
+
+             if (edittext.isFocused() && edittext.text.length < 16){//ToDO проверка бесконечные нули//
+
+                 index = edittext.getSelectionStart();
+                 edittext.text.insert(index, it)
+                 edittext.setSelection(index + 1)
+
+                 Update()
+             }
