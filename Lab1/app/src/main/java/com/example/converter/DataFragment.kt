@@ -3,15 +3,17 @@ package com.example.converter
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils.isEmpty
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
+import com.bumptech.glide.Glide
 import com.example.converter.databinding.FragmentDataBinding
 import com.example.testfragmentview.DataModel
 import java.math.BigDecimal
@@ -20,11 +22,13 @@ import java.math.BigDecimal
 class DataFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
     lateinit var binding: FragmentDataBinding
+    private var SHORT_DELAY = 10
 
     var fromUnit = "meter"
     var toUnit = "meter"
 
     var index = 0
+    var point_index = 1
     var text:String = "empty"
 
     val b = mapOf(
@@ -36,13 +40,13 @@ class DataFragment : Fragment() {
         "byte" to 0.125,
         "kilobyte" to 0.000125,
 
-        "minute" to 60.0,
-        "second" to 3600.0,
-        "hour" to 1.0
+        "kilogram" to 1.00,
+        "оunce" to 35.274,
+        "pound" to 2.20462
     )
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDataBinding.inflate(inflater)
         return binding.root
 
@@ -53,7 +57,6 @@ class DataFragment : Fragment() {
         val edittext =  binding.editTextTextPersonName
         val edittext2 =  binding.editTextTextPersonName2
 
-
         edittext.showSoftInputOnFocus = false
         edittext.disableCopyPaste()
         edittext2.showSoftInputOnFocus = false
@@ -62,99 +65,120 @@ class DataFragment : Fragment() {
         var array_data = resources.getStringArray(R.array.Distance)
 
 
-        //--------------------------------TODO BUTTONCLICK
+        //--------------------------------TODO BUTTON
         dataModel.on_click.observe(activity as LifecycleOwner) {
+           /*
+                сли точка есть
+            66666.6\ запомнить позицию точки
+            66666 6\ удалить
+            666666 \ очистить пробел
+            666666\ переставить
 
-            if (edittext.isFocused() && edittext.text.length < 16) {
+            666666\7 вывести цифру
+            66666.67 вернуть точку на позицию назад от той, что была
+
+            6666666
+            */
+
+
+
+            if (edittext.text.length < 16 || (edittext.text.length == 16 && "." in edittext.text.toString())) {
+
                 if(edittext.text.toString() == "0") edittext.text.clear()
-                index = edittext.getSelectionStart();
+                index = edittext.selectionStart
                 edittext.text.insert(index, it)
-                edittext.setSelection(index + 1)
 
+                edittext.setSelection(index + 1)
                 Update()
+
+                Log.d("(!)", "${edittext.text.toString()}   $index $point_index")
             }
+            else Toast.makeText(requireActivity(), "Достигнуто максимальное количество символов", SHORT_DELAY).show()
 
         }
 
         //------------------------------TODO SPECIAL BUTTON
         dataModel.zero_event.observe(activity as LifecycleOwner) {
 
-            Log.d("(!)", "${edittext.text.toString()}     ${edittext.text.replace("^0+(?!$)".toRegex(), "")}")
+            if (edittext.text.length < 16 && edittext.text.toString() != "0" ){//ToDO проверка бесконечные нули//
 
-            if (edittext.isFocused() && edittext.text.length < 16 && edittext.text.toString() != "0"){//ToDO проверка бесконечные нули//
+                index = edittext.selectionStart
+                edittext.text.insert(index, it)
+                edittext.setSelection(index + 1)
+                Update()
+            }
+            else if(edittext.text.length >= 16) Toast.makeText(requireActivity(), "Достигнуто максимальное количество символов", SHORT_DELAY).show()
 
-                index = edittext.getSelectionStart();
 
-                if (edittext.text.replace("^0+(?!$)".toRegex(), "") == edittext.text.toString()) {
+            /*
+            if (edittext.text.length < 16 && edittext.text.toString() != "0" ){//ToDO проверка бесконечные нули//
+
+                index = edittext.selectionStart
+
+                if (edittext.text.replace("^0+(?!$)".toRegex(), "") == edittext.text.toString() || "." in edittext.text) {
 
                     edittext.text.insert(index, it)
                     edittext.setSelection(index + 1)
 
-                    edittext.setText(edittext.text.replace("^0+(?!$)".toRegex(), ""))
-                    edittext.setSelection(index)
+                    if(!(edittext.text.replace("^0+(?!$)".toRegex(), "") == edittext.text.toString())) {
+
+                        edittext.setText(edittext.text.replace("^0+(?!$)".toRegex(), ""))
+                        edittext.setSelection(index)
+                    }
                 }
-
-
                 Update()
             }
-            /*
-            000 1.0 000
-            0.0
-            0
-               0-> 5
-            1.0
-            0.1
-
-            0000 100024.12000414 0000
-
-            if not empty
-            for(идет по строке)
-                if(s[i] == 0 && s[i+1] == 0) 0x0x0x 01.
-                    index +1
-                else if(s[i] == 0 && s[i+1] != 0 && s[i+1]!='.')  0.0  0x1.0
-                    delete s[i]
-                    index +1
-
-                if(i+1 == '.') break
-
-
-
-             */
-
+            else if(edittext.text.length >= 16) Toast.makeText(requireActivity(), "Достигнуто максимальное количество символов", Toast.LENGTH_SHORT).show()
+            */
         }
         dataModel.point_event.observe(activity as LifecycleOwner) {
-            index = edittext.getSelectionStart();
+            index = edittext.selectionStart
 
-            if (edittext.isFocused() && !edittext.text.isEmpty()  && !(index >= 16)) {//TODO + проверка на выход из диапазона
+            if (edittext.text.isNotEmpty() && index < 17 && !("." in edittext.text.toString())) {//TODO + проверка на выход из диапазона
 
-                edittext.setText(edittext.text.toString().replace("[.]".toRegex(), " "))
 
-                edittext.text.insert(index, it)
-                edittext.setSelection(index + 1)
-                edittext.setText(edittext.text.toString().replace("[ ]".toRegex(), ""))
-                edittext.setSelection(edittext.text.indexOf('.') + 1)
+                edittext.setSelection(index)
 
-                Update()
+                if (edittext.text.isNotEmpty() && index < 16) {
+                    edittext.setText(edittext.text.toString().replace("[.]".toRegex(), " "))
+                    edittext.text.insert(index, it)
+                    edittext.setSelection(index + 1)
+                    edittext.setText(edittext.text.toString().replace("[ ]".toRegex(), ""))
+                    edittext.setSelection(edittext.text.indexOf('.') + 1)
+
+                    point_index = index
+
+                    Update()
+                }
+                else Toast.makeText(requireActivity(), "Достигнуто максимальное количество символов", SHORT_DELAY).show()
+
             }
+            else if("." in edittext.text.toString()) Toast.makeText(requireActivity(), "Точка уже стоит", SHORT_DELAY).show()
+            else Toast.makeText(requireActivity(), "Достигнуто максимальное количество символов", SHORT_DELAY).show()
+
+            if(edittext.text.isEmpty()) Toast.makeText(requireActivity(), "Требуется что-то ввести", SHORT_DELAY).show()
+
 
 
         }
         dataModel.back_event.observe(activity as LifecycleOwner) {
 
-            index = edittext.getSelectionStart();
+            index = edittext.selectionStart
 
             Log.d("(!)","${edittext.text.toString()}   position: $index ${binding.editTextTextPersonName.text.isEmpty()}")
 
-            if(edittext.isFocused() && !edittext.text.isEmpty() && index != 0) {
+            if(edittext.text.isNotEmpty() && index != 0) {
 
-                text = edittext.getText().toString();
-                text = text.substring(0, index - 1) + text.substring(index);
+                text = edittext.text.toString()
+                text = text.substring(0, index - 1) + text.substring(index)
 
-                edittext.setText(text);
+                edittext.setText(text)
                 edittext.setSelection(index - 1)
 
                 Update()
             }
+            else Toast.makeText(requireActivity(), "Удалять нечего :)", SHORT_DELAY).show()
+
         }
 
         //----------------------------------TODO COPY\Paste\Swap
@@ -165,6 +189,7 @@ class DataFragment : Fragment() {
                 val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData = ClipData.newPlainText("text",textToCopy)
                 clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireActivity(), "скопировано в буфер обмена", SHORT_DELAY).show()
 
         }
         binding.btCopy2.setOnClickListener{
@@ -175,34 +200,71 @@ class DataFragment : Fragment() {
                     requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData = ClipData.newPlainText("text", textToCopy)
                 clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireActivity(), "скопировано в буфер обмена", SHORT_DELAY).show()
 
         }
-        binding.btPaste.setOnClickListener{
-            val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var pasteText = clipboardManager.primaryClip?.getItemAt(0)?.text
-            if(pasteText.toString().length <= 17)
+        binding.btPaste.setOnClickListener {
+            val clipboardManager =
+                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val pasteText = clipboardManager.primaryClip?.getItemAt(0)?.text
+            if (pasteText.toString().length <= 17 && isNumeric(pasteText.toString())){
                 edittext.setText(pasteText)
-            else Toast.makeText(requireActivity(), "НИЗЯ!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "вставка выполнена",SHORT_DELAY).show()
+            }
+            if (pasteText!!.isEmpty()) Toast.makeText(requireActivity(), "вставка выполнена",SHORT_DELAY).show()
+            else Toast.makeText(requireActivity(), "достигнуто максимальное количество символов", SHORT_DELAY).show()
             Update()
         }
-        binding.btSwap.setOnClickListener{
-            edittext.setText(edittext2.text.toString())
-            Update()
+        binding.btSwap.setOnClickListener {
+            if (edittext2.text.toString().length <= 17){
+
+                edittext.setText(edittext2.text.toString())
+                Update()
+            }
+            else Toast.makeText(requireActivity(), "достигнуто максимальное количество символов", SHORT_DELAY).show()
+
+        }
+        binding.btPrem.setOnClickListener{
+
+            binding.btCopy.isEnabled = true
+            binding.btCopy2.isEnabled = true
+            binding.btPaste.isEnabled = true
+            binding.btSwap.isEnabled = true
+
+            binding.btPrem.isVisible = false
+            binding.textView.isVisible = false
+            binding.imageView5.isVisible = true
+
+            binding.imblock1.isVisible = false
+            binding.imblock2.isVisible = false
+            binding.imblock3.isVisible = false
+
+            Toast.makeText(requireActivity(), "добро пожаловать!", SHORT_DELAY).show()
+
+        }
+        binding.imageView5.setOnClickListener{
+            binding.imageView4.isVisible = true
+
+            Glide.with(this).load(R.drawable.blood).into(binding.imageView4)
+
         }
 
-        //---------------------------------------TODO CATEGOTY
+        //---------------------------------------TODO CATEGORY
         setSpinner(array_data)
         binding.btCategory1.setOnClickListener{
             array_data = resources.getStringArray(R.array.Data)
             setSpinner(array_data)
+
         }
         binding.btCategory2.setOnClickListener{
             array_data = resources.getStringArray(R.array.Distance)
             setSpinner(array_data)
+
         }
         binding.btCategory3.setOnClickListener{
             array_data = resources.getStringArray(R.array.Time)
             setSpinner(array_data)
+
         }
 
 
@@ -211,10 +273,14 @@ class DataFragment : Fragment() {
     //--------------------------TODO UPDATE
     fun Update(){
         val edittext = binding.editTextTextPersonName
+        val edittext2 = binding.editTextTextPersonName2
 
-        if(!edittext.text.isEmpty() && edittext.text.toString() != ".") {
-            var temp = edittext.text.toString()
-                .toBigDecimal() * (b[toUnit].toString().toBigDecimal() / b[fromUnit].toString().toBigDecimal()) / BigDecimal(1.0000)
+
+
+
+        if(edittext.text.isNotEmpty() && edittext.text.toString() != ".") {
+            val temp = edittext.text.toString()
+                .toBigDecimal() * (b[toUnit].toString().toBigDecimal() / b[fromUnit].toString().toBigDecimal()) // BigDecimal(1.0000)
             binding.editTextTextPersonName2.setText(temp.toString())
         }
         else{
@@ -222,9 +288,22 @@ class DataFragment : Fragment() {
             binding.editTextTextPersonName2.text.clear()
         }
 
+        if(edittext.text.isNotEmpty() && edittext.text.toString().toBigDecimal() <= BigDecimal(.0)) {
+
+            edittext2.setText("0")
+        }
+
         Log.d("(!)","${edittext.text.toString()}   ")
     }
 
+    fun isNumeric(s: String): Boolean {
+        return try {
+            s.toDouble()
+            true
+        } catch (e: NumberFormatException) {
+            false
+        }
+    }
 
 
     //--------------------------TODO SPINNER
@@ -262,6 +341,7 @@ class DataFragment : Fragment() {
     }
 
 
+
     companion object {
         @JvmStatic
         fun newInstance() = DataFragment()
@@ -286,9 +366,3 @@ class DataFragment : Fragment() {
         }
     }
 }
-
-//focus default
-
-//тосты по любому поводу
-
-//Меню цвета? и Vip

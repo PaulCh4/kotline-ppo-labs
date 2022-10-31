@@ -26,11 +26,8 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.frButtonPanel, ButtonPanelFragment()).commit()
         supportFragmentManager.beginTransaction().replace(R.id.frDataPanel, DataFragment()).commit()
 
-      //  showGif()
 
 
     }
-    //fun showGif(){
-   //    Glide.with(this).load(R.drawable.rename).into(binding.imageButton)
-   // }
+
 }

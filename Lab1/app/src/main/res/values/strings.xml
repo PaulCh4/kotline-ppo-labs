@@ -16,8 +16,8 @@
         <item>kilobyte</item>
     </string-array>
     <string-array name="Time">
-        <item>minute</item>
-        <item>second</item>
-        <item>hour</item>
+        <item>kilogram</item>
+        <item>оunce</item>
+        <item>pound</item>
     </string-array>
 </resources>

@@ -12,12 +12,27 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="-58dp">
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.01"
+            app:srcCompat="@drawable/blood" />
+
         <Button
             android:id="@+id/btSwap"
             android:layout_width="47dp"
             android:layout_height="54dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#EDBDBD"
+            android:enabled="false"
             app:icon="@android:drawable/ic_menu_rotate"
             app:iconGravity="textTop"
             app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
@@ -106,7 +121,7 @@
             android:layout_width="94dp"
             android:layout_height="48sp"
             android:backgroundTint="#E86868"
-            android:text="-----"
+            android:text="WEIGHT"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
             app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
@@ -118,6 +133,7 @@
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
+            android:enabled="false"
             android:text="copy"
             android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
@@ -130,6 +146,7 @@
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
+            android:enabled="false"
             android:text="paste"
             android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
@@ -142,6 +159,7 @@
             android:layout_width="55dp"
             android:layout_height="30dp"
             android:backgroundTint="#E86868"
+            android:enabled="false"
             android:text="copy"
             android:textSize="6sp"
             app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
@@ -172,11 +190,13 @@
             android:layout_width="242dp"
             android:layout_height="56dp"
             android:layout_marginTop="64dp"
+            android:clickable="false"
+
+            android:cursorVisible="false"
             android:editable="false"
 
             android:ems="10"
             android:focusable="false"
-
             android:focusableInTouchMode="false"
             android:hint="0.0"
             android:inputType="textPersonName"
@@ -216,6 +236,79 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
             app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btPrem"
+            android:layout_width="126dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="72dp"
+            android:backgroundTint="#ECAB03"
+            android:onClick="OnClickPremium"
+            android:text="PREMIUM"
+            android:textColor="#FFE600"
+            android:textColorHighlight="#FFBF00"
+            android:textColorHint="#F3FB00"
+            android:textColorLink="#FFDD03"
+            app:layout_constraintBottom_toBottomOf="@+id/btSwap"
+            app:layout_constraintEnd_toStartOf="@+id/btSwap"
+            app:layout_constraintTop_toTopOf="@+id/btSwap" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="72dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="328dp"
+            android:src="@drawable/hellowin"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.135"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="340dp"
+            android:text="buy premium to unlock swap and copy\past function"
+            android:textColor="#FFC107"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.179"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imblock1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_baseline_lock_24"
+            app:layout_constraintEnd_toEndOf="@+id/btSwap"
+            app:layout_constraintHorizontal_bias="0.608"
+            app:layout_constraintStart_toStartOf="@+id/btSwap"
+            app:layout_constraintTop_toTopOf="@+id/btSwap" />
+
+        <ImageView
+            android:id="@+id/imblock2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_lock_24"
+            app:layout_constraintBottom_toBottomOf="@+id/btPaste"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+            app:layout_constraintTop_toTopOf="@+id/btCopy" />
+
+        <ImageView
+            android:id="@+id/imblock3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_baseline_lock_24"
+            app:layout_constraintBottom_toBottomOf="@+id/X5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.066"
+            app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toTopOf="@+id/btCopy2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
